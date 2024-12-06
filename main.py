@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 st.set_page_config(layout="wide")
 
 # Load or create your dataset
-df = pd.read_csv('data.csv')
+df = pd.read_csv('merged_data.csv')
 
 
 # Streamlit elements
@@ -34,9 +34,11 @@ with col1:
   st.header('Pie chart')
   fig = px.pie(x, 
                values= 'count', 
-               names='subjectArea')
+               names='subjectArea',
+               template="gridon"
+              )
   st.plotly_chart(fig, use_container_width=True)
 
-x
 
+df
 
