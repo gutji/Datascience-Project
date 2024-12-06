@@ -4,16 +4,18 @@ import datetime
 from PIL import Image
 import plotly.express as px
 import plotly.graph_objects as go
+
+st.set_page_config(layout="wide")
 '''
 url = "https://raw.githubusercontent.com/Chocobo11218/Datascience-Project/refs/heads/main/merged_data.csv"
 response = requests.get(url, verify=False)  # Bypassing SSL verification
 with open('merged_data.csv', 'wb') as f:
     f.write(response.content)
 '''
-st.set_page_config(layout="wide")
+
 
 # Load or create your dataset
-df = pd.read_csv('data.csv')
+df = pd.read_csv('merged_data.csv')
 
 
 # Streamlit elements
