@@ -11,6 +11,8 @@ st.set_page_config(layout="wide")
 # Load or create your dataset
 df = pd.read_csv('merged_data.csv')
 
+df_keyword = pd.read_csv('top_keywords_by_field.csv')
+
 
 # Streamlit elements
 st.title("Keyword Trends Dashboard")
@@ -20,6 +22,11 @@ st.title("Keyword Trends Dashboard")
 st.sidebar.header("Sidebar Controls")
 
 year = st.sidebar.selectbox("Choose year", ("2018", "2019",'2020', '2021', '2022', '2023'))
+subject = st.sidebar.selectbox("Choose field",  df_keyword['field_of_study'])
+
+field = df_keyword.loc[df_keyword['field_of_study'] == subject]
+key = field['top_keyword']
+
 def slicing(date):
   l = date.split('/')
   return l[-1]
@@ -39,6 +46,9 @@ with col1:
               )
   st.plotly_chart(fig, use_container_width=True)
 
+with col2:
+  st.write(key)
+  
 
-df
+
 
