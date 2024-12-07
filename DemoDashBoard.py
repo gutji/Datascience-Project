@@ -19,12 +19,12 @@ st.sidebar.header("Sidebar Controls")
 year = st.sidebar.selectbox("Choose year", ("2018", "2019", "2020", "2021", "2022", "2023"))
 
 # Function to extract the year from the publication date
-def slicing(date):
+def get_year(date):
     l = date.split('/')
     return l[-1]
 
 # Apply the function to create a new column 'publication_date_year'
-df['publication_date_year'] = df['publication_date'].apply(lambda x: slicing(x))
+df['publication_date_year'] = df['publication_date'].apply(lambda x: get_year(x))
 
 # Filter data by selected year
 df_year = df.loc[df['publication_date_year'] == year]
