@@ -1,10 +1,6 @@
 import streamlit as st
 import pandas as pd
-import datetime
-from PIL import Image
-import matplotlib.pyplot as plt
 import plotly.express as px
-import plotly.graph_objects as go
 
 # Sample DataFrame with keywords
 data = {
@@ -54,22 +50,36 @@ keyword_to_field = {
     "Arts": "ARTS"
 }
 
+# Read data from CSV files
 df = pd.read_csv("merged_data_withkeywords.csv")
 top_keyword_df = pd.read_csv("top_keywords_by_field.csv")
+
 # Set page configuration
-st.set_page_config(page_title="Analytics Dashboard", layout="wide")
+st.set_page_config(page_title="Analytics Dashboard🤩", layout="wide")
 
 # Sidebar content
 st.sidebar.title("Analytics")
+
 analytic_option = st.sidebar.selectbox(
     "Select an analytic type",
-    ["Keyword Trends", "Statistical Data", "Subject Area"]
+    ["Keyword Trends📈", "Statistical Data", "Subject Area📚", "Top Keyword"]
 )
 
 # Main content based on selection
-st.title("Analytics Dashboard")
+st.title("Analytics Dashboard🤩")
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: #071630;  
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-if analytic_option == "Keyword Trends":
+# Keyword Trends Section
+if analytic_option == "Keyword Trends📈":
     # Year selection
     selected_year = st.sidebar.selectbox(
         "Select Year",
@@ -81,40 +91,34 @@ if analytic_option == "Keyword Trends":
         "Field of Study",
         [
             "Medicine", "Engineering", "Chemistry", "Business", "Biochemistry",
-        "Decision Science", "Materials", "Computer Science", "Physics",
-        "Environment", "Agriculture", "Energy", "Sociology", "Veterinary",
-        "Neuroscience", "Economics", "Earth Science", "Mathematics",
-        "Multidisciplinary", "Immunology", "Pharmacology", "Dentistry",
-        "Chemical Engineering", "Nursing", "Health", "Psychology", "Arts"
+            "Decision Science", "Materials", "Computer Science", "Physics",
+            "Environment", "Agriculture", "Energy", "Sociology", "Veterinary",
+            "Neuroscience", "Economics", "Earth Science", "Mathematics",
+            "Multidisciplinary", "Immunology", "Pharmacology", "Dentistry",
+            "Chemical Engineering", "Nursing", "Health", "Psychology", "Arts"
         ]
     )
 
-
-
     # Filter data based on selected field
-    filtered_data = top_keyword_df[top_keyword_df == keyword_to_field[selected_field]]
-    result = filtered_data["top_keyword"]
+    field_code = keyword_to_field.get(selected_field)  # Retrieve the field code based on selected field
+    filtered_data = top_keyword_df[top_keyword_df["field_of_study"] == field_code]
 
-    # Display the table
+    # Optionally, you can further filter by selected year if the data has a year column
+    filtered_data = filtered_data[filtered_data["Year"] == selected_year]
+
+    # Show the filtered data (e.g., the top keywords)
     st.subheader(f"Keyword Trends for {selected_field} in {selected_year}")
-    st.table(result)
+    st.table(filtered_data[['Keyword', 'Top Keyword']])  # Adjust based on your column names
 
+# Statistical Data Section
 elif analytic_option == "Statistical Data":
     st.subheader("Statistical Data")
     st.write("This section will display statistical data.")
 
-elif analytic_option == "Subject Area":
-
+# Subject Area Section
+elif analytic_option == "Subject Area📚":
     # Bar chart count of subject areas
-
-    # Load your dataset
-    df = pd.read_csv('merged_data.csv')
-
-    # Streamlit elements
-    st.title("Keyword Trends Dashboard")
-
-    # Sidebar
-    st.sidebar.header("Sidebar Controls")
+    st.title("Subject Area Distribution")
 
     # Select year
     year = st.sidebar.selectbox("Choose year", ("2018", "2019", "2020", "2021", "2022", "2023"))
@@ -156,7 +160,6 @@ elif analytic_option == "Subject Area":
     # Filter data based on selected rank range
     x_filtered = x.iloc[rank_range[0] - 1 : rank_range[1]]
 
-    st.header('Bar Chart')
     fig = px.bar(
         x_filtered,
         x='subjectArea_first',
@@ -170,3 +173,32 @@ elif analytic_option == "Subject Area":
     # Display the filtered subject area counts
     st.sidebar.write(x_filtered)
 
+# Top Keyword Section
+elif analytic_option == "Top Keyword":
+    # Year selection
+    selected_year = st.sidebar.selectbox(
+        "Select Year",
+        ["2018", "2019", "2020", "2021", "2022", "2023"]
+    )
+
+    # Field of Study selection
+    selected_field = st.sidebar.selectbox(
+        "Field of Study",
+        [
+            "Medicine", "Engineering", "Chemistry", "Business", "Biochemistry",
+            "Decision Science", "Materials", "Computer Science", "Physics",
+            "Environment", "Agriculture", "Energy", "Sociology", "Veterinary",
+            "Neuroscience", "Economics", "Earth Science", "Mathematics",
+            "Multidisciplinary", "Immunology", "Pharmacology", "Dentistry",
+            "Chemical Engineering", "Nursing", "Health", "Psychology", "Arts"
+        ]
+    )
+
+    # Filter data based on selected field and year
+    field_code = keyword_to_field.get(selected_field)  # Retrieve the field code based on selected field
+    filtered_data = top_keyword_df[top_keyword_df["field_of_study"] == field_code]
+    filtered_data = filtered_data[filtered_data["Year"] == selected_year]
+
+    # Show the top keywords for the selected year and field
+    st.subheader(f"Top Keywords for {selected_field} in {selected_year}")
+    st.table(filtered_data[['Keyword', 'Top Keyword']])  # Adjust based on your column names
