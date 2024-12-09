@@ -54,7 +54,7 @@ keyword_to_field = {
 }
 
 df = pd.read_csv("merged_data_withkeywords.csv")
-
+top_keyword_df = pd.read_csv("top_keywords_by_field.csv")
 # Set page configuration
 st.set_page_config(page_title="Analytics Dashboard", layout="wide")
 
@@ -91,11 +91,12 @@ if analytic_option == "Keyword Trends":
 
 
     # Filter data based on selected field
-    filtered_data = df[df["subjectArea"] == keyword_to_field[selected_field]]
-    ##display keyword from kmeans over here
+    filtered_data = top_keyword_df[top_keyword_df == keyword_to_field[selected_field]]
+    result = filtered_data["top_keyword"]
+
     # Display the table
     st.subheader(f"Keyword Trends for {selected_field} in {selected_year}")
-    st.table(filtered_data)
+    st.table(result)
 
 elif analytic_option == "Statistical Data":
     st.subheader("Statistical Data")
@@ -104,3 +105,4 @@ elif analytic_option == "Statistical Data":
 elif analytic_option == "Subject Area":
     st.subheader("Subject Area")
     st.write("This section will display information about subject areas.")
+    #over hereeeeeeeeeeeeee
