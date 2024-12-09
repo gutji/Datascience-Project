@@ -64,7 +64,7 @@ selected_full_name = st.sidebar.selectbox("Select Subject Area", available_subje
 selected_subject_area = full_name_to_abbreviation[selected_full_name]
 
 # Display selected subject area in subheader
-st.subheader(f"Line graph for {selected_full_name} subject area")
+st.subheader(f"Line graph for {selected_full_name} Subject Area")
 
 # Filter data by selected subject area (or use all data)
 if selected_subject_area == "All":
@@ -97,17 +97,31 @@ else:
     # Display the plot in Streamlit
     st.pyplot(fig)
 
-# WordCloud Section for Top_Three_Keywords
-st.subheader(f"WordCloud for {selected_full_name} subject area")
+# Add a year filter for the WordCloud
+years_available = filtered_subject_data['year'].dropna().unique()
+if len(years_available) > 0:
+    years_available = sorted(years_available)
+    selected_year = st.sidebar.selectbox("Select Year for WordCloud", years_available)
 
-# Combine all keywords into one string for WordCloud generation
-all_keywords = ', '.join(filtered_subject_data['Top_Three_Keywords'].dropna()).replace(", ", " ")
+    # Filter the data by the selected year
+    year_filtered_data = filtered_subject_data[filtered_subject_data['year'] == selected_year]
 
-# Generate WordCloud
-wordcloud = WordCloud(width=800, height=400, background_color='white').generate(all_keywords)
+    if year_filtered_data.empty:
+        st.warning(f"No data found for the year {selected_year} in {selected_full_name}.")
+    else:
+        # Subheader for WordCloud
+        st.subheader(f"Top Keyword Trends for {selected_full_name} in {selected_year}.")
 
-# Display WordCloud in Streamlit
-fig_wc, ax_wc = plt.subplots(figsize=(10, 5))
-ax_wc.imshow(wordcloud, interpolation='bilinear')
-ax_wc.axis('off')
-st.pyplot(fig_wc)
+        # Combine all keywords into one string for WordCloud generation
+        all_keywords = ', '.join(year_filtered_data['Top_Three_Keywords'].dropna()).replace(", ", " ")
+
+        # Generate WordCloud
+        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(all_keywords)
+
+        # Display WordCloud in Streamlit
+        fig_wc, ax_wc = plt.subplots(figsize=(10, 5))
+        ax_wc.imshow(wordcloud, interpolation='bilinear')
+        ax_wc.axis('off')
+        st.pyplot(fig_wc)
+else:
+    st.warning("No years available for the selected subject area.")

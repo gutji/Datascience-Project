@@ -1,6 +1,3 @@
-# Interactive Network Graph
-# รันได้แต่รกมาก
-
 import streamlit as st
 import networkx as nx
 import pandas as pd
@@ -12,10 +9,9 @@ st.title("Interactive Network Graph: Subject Areas and Keywords")
 # Read the CSV file into a DataFrame
 df = pd.read_csv('merged_data_withkeywords.csv')
 
-
 # Process the data
 data = [
-    (row["subjectArea"], row["Top_Three_Keywords"].split(","))
+    (row["subjectArea"], row["One_keyword"].split(",") if isinstance(row["One_keyword"], str) else [])
     for _, row in df.iterrows()
 ]
 
@@ -24,7 +20,7 @@ G = nx.Graph()
 
 # Add nodes and edges
 for subjects, keywords in data:
-    subject_nodes = subjects.split(",")
+    subject_nodes = subjects.split(",") if isinstance(subjects, str) else []
     for subject in subject_nodes:
         G.add_node(subject, type='subject')
     for keyword in keywords:
