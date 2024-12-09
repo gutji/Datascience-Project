@@ -54,20 +54,19 @@ rank_range = st.sidebar.slider(
 x_filtered = x.iloc[rank_range[0] - 1 : rank_range[1]]
 
 # Streamlit layout with columns
-col1, col2 = st.columns(2)
+#col1, col2 = st.columns(2)
 
-with col1:
-    st.header('Bar Chart')
-    fig = px.bar(
-        x_filtered,
-        x='subjectArea_first',
-        y='count',
-        title="Subject Area Distribution (Filtered)",
-        labels={'subjectArea_first': 'Subject Area', 'count': 'Count'},
-        text_auto=True  # Adds text labels on the bars
-    )
-    st.plotly_chart(fig, use_container_width=True)
+#with col1:
+st.header('Bar Chart')
+fig = px.bar(
+    x_filtered,
+    x='subjectArea_first',
+    y='count',
+    title="Subject Area Distribution (Filtered)",
+    labels={'subjectArea_first': 'Subject Area', 'count': 'Count'},
+    text_auto=True  # Adds text labels on the bars
+)
+st.plotly_chart(fig, use_container_width=True)
 
 # Display the filtered subject area counts
-with col2:
-    st.write(x_filtered)
+st.sidebar.write(x_filtered)
