@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import datetime
 from PIL import Image
+import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
 
@@ -103,8 +104,7 @@ elif analytic_option == "Statistical Data":
     st.write("This section will display statistical data.")
 
 elif analytic_option == "Subject Area":
-    st.subheader("Subject Area")
-    st.write("This section will display information about subject areas.")
+
     # Bar chart count of subject areas
 
     # Load your dataset
