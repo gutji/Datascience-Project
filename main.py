@@ -38,6 +38,7 @@ x = df_year['subjectArea'].value_counts().reset_index()
 col1, col2 = st.columns(2)
 
 with col1:
+  st.markdown("[Click here to visit Streamlit](https://streamlit.io)")
   st.header('Pie chart')
   fig = px.pie(x, 
                values= 'count', 
