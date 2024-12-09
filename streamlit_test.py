@@ -53,7 +53,7 @@ keyword_to_field = {
     "Arts": "ARTS"
 }
 
-df = pd.read_csv("merged_data_withkeywords.csv");
+df = pd.read_csv("merged_data_withkeywords.csv")
 
 # Set page configuration
 st.set_page_config(page_title="Analytics Dashboard", layout="wide")
