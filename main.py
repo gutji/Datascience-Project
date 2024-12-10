@@ -8,17 +8,17 @@ import plotly.graph_objects as go
 
 st.set_page_config(layout="wide")
 
-# Load or create your dataset
+
 df = pd.read_csv('merged_data.csv')
 
 df_keyword = pd.read_csv('top_keywords_by_field.csv')
 
 
-# Streamlit elements
+
 st.title("Keyword Trends Dashboard")
 
 
-# Sidebar
+
 st.sidebar.header("Sidebar Controls")
 
 year = st.sidebar.selectbox("Choose year", ("2018", "2019",'2020', '2021', '2022', '2023'))
