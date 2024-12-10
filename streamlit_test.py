@@ -17,7 +17,7 @@ import seaborn as sns
 st.set_page_config(page_title="Analytics Dashboard🤩", layout="wide")
 
 
-df = pd.read_csv('merged_data_withkeywords&vectors_dropNone.csv', low_memory=False)
+df = pd.read_csv('merged_data_vectors.csv', low_memory=False)
 
 field_of_study= [
         "MEDI", "ENGI", "CHEM", "BUSI", "BIOC", "DECI", "MATE", "COMP",
@@ -438,7 +438,7 @@ elif analytic_option == "Top Keyword":
     )
 
     # ------------------------------------------------------------------------------------------------------------------------#
-    df_kmean = pd.read_csv('merged_data_withkeywords&vectors_dropNone.csv')
+    df_kmean = pd.read_csv('merged_data_vectors.csv')
     field_data = df_kmean.loc[df_kmean['subjectArea'].str.contains(keyword_to_field.get(selected_field))]
     field_data.reset_index(inplace=True)
     
