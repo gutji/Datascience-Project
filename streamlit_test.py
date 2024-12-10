@@ -123,8 +123,6 @@ keyword_to_field = {
 df = pd.read_csv("merged_data_withkeywords.csv")
 top_keyword_df = pd.read_csv("top_keywords_by_field.csv")
 
-# Set page configuration
-st.set_page_config(page_title="Analytics Dashboard🤩", layout="wide")
 
 # Sidebar content
 st.sidebar.title("Analytics")
