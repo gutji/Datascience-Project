@@ -62,7 +62,7 @@ for field in field_of_study:
     result.append({"field_of_study": field, "top_keyword": f"{word1}, {word2}, {word3}"})
 
 finaldf = pd.DataFrame(result)
-finaldf
+
 
 
 # Sample DataFrame with keywords
