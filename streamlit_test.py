@@ -66,19 +66,33 @@ analytic_option = st.sidebar.selectbox(
     "Select an analytic type",
     ["Keyword Trends📈", "Statistical Data", "Subject Area📚", "Top Keyword"]
 )
-
-# Main content based on selection
-st.title("Analytics Dashboard🤩")
 st.markdown(
     """
     <style>
-    body {
-        background-color: #071630;  
+    /* Sidebar background color and text styling */
+    [data-testid="stSidebar"] {
+        background-color: #071630;
+    }
+    [data-testid="stSidebar"] * {
+        color: white !important; /* Sidebar text color */
+    }
+
+    /* Make selectbox text black, including the selected option */
+    [data-testid="stSidebar"] .stSelectbox div[data-baseweb="select"] > div {
+        color: black !important; /* Selected option text color */
+    }
+
+    /* Adjust dropdown menu text color when open */
+    [data-testid="stSidebar"] .stSelectbox div[data-baseweb="select"] .css-1hb7zxy-IndicatorsContainer {
+        color: black !important; /* Dropdown indicator and text */
     }
     </style>
     """,
     unsafe_allow_html=True
 )
+# Main content based on selection
+st.title("Analytics Dashboard🤩")
+
 # =========================================================================
 # Keyword Trends Section
 if analytic_option == "Keyword Trends📈":
