@@ -346,7 +346,7 @@ elif analytic_option == "Subject Area📚":
     pos = nx.spring_layout(G, seed=42)
 
     # Streamlit app
-    st.title("Co-Occurrence of Subject Areas with Betweenness Centrality")
+    st.title("Co-Occurrence of Subject Areas with Between Centrality")
 
     # Graph visualization
     def plot_interactive_network(graph, positions, betweenness_centrality):
