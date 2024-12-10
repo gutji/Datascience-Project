@@ -27,6 +27,50 @@ field_of_study= [
     ]
 
 
+result = []
+
+for field in field_of_study:
+    field_data = df.loc[df['subjectArea'].str.contains(field)]
+    field_data.reset_index(inplace=True)
+    print(field)
+        
+    # Prepare the text data for TF-IDF
+    l = []
+    for i in range(300):
+        l.append(f"vector{i}")
+
+    vector = field_data[l]
+
+    # Apply KMeans clustering (choose the number of clusters)
+    num_clusters = 5  # You can modify this depending on your data
+    kmeans = KMeans(n_clusters=num_clusters, random_state=42)
+    kmeans.fit(vector)
+
+    # Add the cluster labels to the DataFrame for the current field of study
+    field_data['cluster'] = kmeans.labels_
+
+    # Identify the largest cluster by size
+    largest_cluster = np.argmax(np.bincount(kmeans.labels_))
+    #print(largest_cluster)
+
+    # Get the indices of the largest cluster
+    largest_cluster_indices = np.where(kmeans.labels_ == largest_cluster)[0]
+    #print(largest_cluster_indices)
+
+    n = len(largest_cluster_indices)
+    key1 = field_data.loc[field_data.index == largest_cluster_indices[0]]['One_keyword']
+    key2 = field_data.loc[field_data.index == largest_cluster_indices[int(n/2)]]['One_keyword']
+    key3 = field_data.loc[field_data.index == largest_cluster_indices[-1]]['One_keyword']
+    word1 = key1.iloc[0]
+    word2 = key2.iloc[0]
+    word3 = key3.iloc[0]
+
+    result.append({"field_of_study": field, "top_keyword": f"{word1}, {word2}, {word3}"})
+
+finaldf = pd.DataFrame(result)
+
+
+
 # Sample DataFrame with keywords
 data = {
     "Field of Study": [
@@ -79,7 +123,8 @@ keyword_to_field = {
 df = pd.read_csv("merged_data_withkeywords.csv")
 top_keyword_df = pd.read_csv("top_keywords_by_field.csv")
 
-
+# Set page configuration
+st.set_page_config(page_title="Analytics Dashboard🤩", layout="wide")
 
 # Sidebar content
 st.sidebar.title("Analytics")
@@ -414,15 +459,9 @@ elif analytic_option == "Subject Area📚":
 # Top Keyword Section
 elif analytic_option == "Top Keyword":
     # Year selection
-    col1, col2 = st.columns([0.3, 0.7])
-    with col1: 
-        datafr = pd.read_csv("extracted_kmean.csv")
-        
-        st.markdown(
-        '<h1 style="font-size:27px;">Top 3 Keywords by Subject Area</h1>', 
-        unsafe_allow_html=True
-        )
-        st.table(datafr[['field_of_study','top_keyword']])
+    datafr = pd.read_csv("extracted_kmean.csv")
+    st.title("Top 3 keywords by subject area")
+    st.table(datafr[['field_of_study','top_keyword']])
 
     # Field of Study selection
     selected_field = st.sidebar.selectbox(
@@ -491,23 +530,27 @@ elif analytic_option == "Top Keyword":
         palette='tab10', 
         data=field_data, 
         legend='full', 
-        alpha=0.5
+        alpha=0.7
     )
 
+    # Annotate the selected keywords
+    plt.text(field_data.loc[largest_cluster_indices[0], 'PCA1'], 
+            field_data.loc[largest_cluster_indices[0], 'PCA2'], 
+            key1, fontsize=12, color='red')
+    plt.text(field_data.loc[largest_cluster_indices[int(n/2)], 'PCA1'], 
+            field_data.loc[largest_cluster_indices[int(n/2)], 'PCA2'], 
+            key2, fontsize=12, color='green')
+    plt.text(field_data.loc[largest_cluster_indices[-1], 'PCA1'], 
+            field_data.loc[largest_cluster_indices[-1], 'PCA2'], 
+            key3, fontsize=12, color='blue')
 
     # Customize plot
-    plt.title(f"PCA of Clusters for {keyword_to_field.get(selected_field)} Field", fontsize=16)
+    plt.title('PCA of Clusters for ENGI Field', fontsize=16)
     plt.xlabel('PCA1', fontsize=12)
     plt.ylabel('PCA2', fontsize=12)
     plt.legend(title='Cluster', bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.grid(True)
-    
-    with col2:
-        st.markdown(
-        '<h1 style="font-size:27px;">K-Means clustering with PCA</h1>', 
-        unsafe_allow_html=True
-        )
-        st.pyplot(plt.gcf())
+    plt.show()
     
 
     # Show the top keywords for the selected year and field
