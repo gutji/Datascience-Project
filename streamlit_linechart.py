@@ -1,7 +1,11 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
+import plotly.express as px
 from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+import networkx as nx
+import plotly.graph_objects as go
+
 
 # Load your dataset
 df = pd.read_csv('merged_data_withkeywords.csv')  # Adjust to your file path
@@ -17,37 +21,6 @@ keywords_df = subject_df.assign(One_keyword=subject_df['One_keyword'].str.split(
 
 # Extract year for aggregation
 keywords_df['year'] = keywords_df['publication_date'].dt.year
-
-# Dictionary to map abbreviations to full names
-subject_area_map = {
-    "MEDI": "Medicine",
-    "ENGI": "Engineering",
-    "CHEM": "Chemistry",
-    "BUSI": "Business",
-    "BIOC": "Biochemistry",
-    "DECI": "Decision Sciences",
-    "MATE": "Materials Science",
-    "COMP": "Computer Science",
-    "PHYS": "Physics",
-    "ENVI": "Environmental Science",
-    "AGRI": "Agricultural Science",
-    "ENER": "Energy",
-    "SOCI": "Sociology",
-    "VETE": "Veterinary Science",
-    "NEUR": "Neuroscience",
-    "ECON": "Economics",
-    "EART": "Earth Sciences",
-    "MATH": "Mathematics",
-    "MULT": "Multidisciplinary",
-    "IMMU": "Immunology",
-    "PHAR": "Pharmacology",
-    "DENT": "Dentistry",
-    "CENG": "Chemical Engineering",
-    "NURS": "Nursing",
-    "HEAL": "Health Sciences",
-    "PSYC": "Psychology",
-    "ARTS": "Arts and Humanities"
-}
 
 # Add an option for all subject areas
 subject_area_map["All"] = "All Subject Areas"
@@ -96,32 +69,3 @@ else:
 
     # Display the plot in Streamlit
     st.pyplot(fig)
-
-# Add a year filter for the WordCloud
-years_available = filtered_subject_data['year'].dropna().unique()
-if len(years_available) > 0:
-    years_available = sorted(years_available)
-    selected_year = st.sidebar.selectbox("Select Year for WordCloud", years_available)
-
-    # Filter the data by the selected year
-    year_filtered_data = filtered_subject_data[filtered_subject_data['year'] == selected_year]
-
-    if year_filtered_data.empty:
-        st.warning(f"No data found for the year {selected_year} in {selected_full_name}.")
-    else:
-        # Subheader for WordCloud
-        st.subheader(f"Top Keyword Trends for {selected_full_name} in {selected_year}.")
-
-        # Combine all keywords into one string for WordCloud generation
-        all_keywords = ', '.join(year_filtered_data['Top_Three_Keywords'].dropna()).replace(", ", " ")
-
-        # Generate WordCloud
-        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(all_keywords)
-
-        # Display WordCloud in Streamlit
-        fig_wc, ax_wc = plt.subplots(figsize=(10, 5))
-        ax_wc.imshow(wordcloud, interpolation='bilinear')
-        ax_wc.axis('off')
-        st.pyplot(fig_wc)
-else:
-    st.warning("No years available for the selected subject area.")
