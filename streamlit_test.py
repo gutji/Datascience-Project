@@ -12,7 +12,7 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 import seaborn as sns
-df = pd.read_csv('merged_data_vectors.csv', low_memory=False)
+df = pd.read_csv('merged_data_withkeywords&vectors_dropNone.csv', low_memory=False)
 field_of_study= [
         "MEDI", "ENGI", "CHEM", "BUSI", "BIOC", "DECI", "MATE", "COMP",
         "PHYS", "ENVI", "AGRI", "ENER", "SOCI", "VETE", "NEUR", "ECON",
